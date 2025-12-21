@@ -6,7 +6,7 @@ HW_LAYER_PORT_CPP += $(PROJECT_DIR)/hw_layer/ports/stm32/stm32f4/mpu_util.cpp \
 
 MCU = cortex-m4
 USE_FPU = hard
-LDSCRIPT = $(PROJECT_DIR)/hw_layer/ports/stm32/stm32f4/STM32F4.ld
+LDSCRIPT ?= $(PROJECT_DIR)/hw_layer/ports/stm32/stm32f4/STM32F4.ld
 # kludge: while we the very generic ChibiOS board.c we use our custom board.h from current folder!
 ifeq ($(BOARD_C),)
 	BOARD_C = $(CHIBIOS)/os/hal/boards/ST_STM32F4_DISCOVERY/board.c
