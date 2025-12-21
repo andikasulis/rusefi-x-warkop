@@ -25,23 +25,32 @@ size_t flashSectorSize(flashsector_t sector) {
   return 0;
 }
 
+#ifndef TM_ID_GetFlashSize
+#define FLASHSIZE_BASE 0x1FFF7A22U
+#define TM_ID_GetFlashSize() (*(__IO uint16_t *)(FLASHSIZE_BASE))
+#endif
+
 #ifdef EXPECTED_BOARD_FLASH_SIZE
+#pragma message "Compiling with EXPECTED_BOARD_FLASH_SIZE override"
 #define TM_ID_GetFlashSize_Val EXPECTED_BOARD_FLASH_SIZE
 #else
+#warning "EXPECTED_BOARD_FLASH_SIZE NOT DEFINED! Using hardware detection."
 #define TM_ID_GetFlashSize_Val TM_ID_GetFlashSize()
 #endif
 
 uintptr_t getFlashAddrFirstCopy() {
-  /* last 128K sector on 512K devices */
+  /* last 128K sector (Sector 7) on 512K devices */
+  /* Firmware is restricted to 384K (Sectors 0-6) via linker script */
   if (TM_ID_GetFlashSize_Val <= 512)
     return 0x08060000;
   return 0x080E0000;
 }
 
 uintptr_t getFlashAddrSecondCopy() {
-  /* no second copy on 512K devices */
+  /* No second copy on 512K devices to prevent overlap or illegal address access
+   */
   if (TM_ID_GetFlashSize_Val <= 512)
-    return 0x000000000;
+    return 0;
   return 0x080C0000;
 }
 
