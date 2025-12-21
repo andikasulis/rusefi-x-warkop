@@ -4,8 +4,9 @@
  * @date Jul 27, 2014
  * @author Andrey Belomutskiy, (c) 2012-2020
  */
-#include "flash_int.h"
 #include "pch.h"
+// Break include sorting
+#include "flash_int.h"
 
 bool mcuCanFlashWhileRunning() {
   // Never allow flash while running on F4, dual bank not implemented.
