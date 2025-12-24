@@ -1919,10 +1919,11 @@ end_struct
     uint8_t idleRumbleAmplitude;Rumble amplitude, 0, 100, 0;"%"
     uint8_t idleRumblePeriod;Rumble period (speed), 1, 20, 0;"x100ms"
     uint8_t idleRumbleMethod;Rumble method: 0=Timing 1=Fuel 2=Spark 3=Combined, 0, 3, 0
-    int8_t autoscale idleRumbleTiming;Max timing offset, -10, 10, 0;"deg"
-    int8_t autoscale idleRumbleFuel;Max fuel adjustment, -20, 20, 0;"%"
+    int8_t autoscale idleRumbleTiming;Max timing offset;"deg", 1, 0, -10, 10, 0
+    int8_t autoscale idleRumbleFuel;Max fuel adjustment;"%", 1, 0, -20, 20, 0
     uint16_t idleRumbleMaxRpm;Max RPM for rumble active, 0, 2000, 0;"rpm"
     uint8_t idleRumbleMaxTps;Max TPS for rumble active, 0, 20, 0;"%"
+
 
 ! end of engine_configuration_s
 end_struct
