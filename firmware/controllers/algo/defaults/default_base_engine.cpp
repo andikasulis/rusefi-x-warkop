@@ -432,7 +432,7 @@ void setDefaultBaseEngine() {
   engineConfiguration->idleRumbleEnabled = false;
   engineConfiguration->idleRumbleAmplitude = 10;
   engineConfiguration->idleRumblePeriod = 4;
-  engineConfiguration->idleRumbleMethod = IRM_COMBINED;
+  engineConfiguration->idleRumbleMethod = 3;
   engineConfiguration->idleRumbleTiming = -10;
   engineConfiguration->idleRumbleFuel = 5;
   engineConfiguration->idleRumbleMaxRpm = 1300;
