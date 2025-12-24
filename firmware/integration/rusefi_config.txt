@@ -1918,7 +1918,7 @@ end_struct
     uint8_t idleRumbleEnabled;Enable idle rumble effect;"", 1, 0, 0, 1, 0
     uint8_t idleRumbleAmplitude;Rumble amplitude;"%", 1, 0, 0, 100, 0
     uint8_t idleRumblePeriod;Rumble period (speed);"x100ms", 1, 0, 1, 20, 0
-    uint8_t idleRumbleMethod;Rumble method: 0=Timing 1=Fuel 2=Spark 3=Combined;"", 1, 0, 0, 3, 0
+    idle_rumble_method_e idleRumbleMethod;Rumble method: 0=Timing 1=Fuel 2=Spark 3=Combined;"", 1, 0, 0, 3, 0
     int8_t autoscale idleRumbleTiming;Max timing offset;"deg", 1, 0, -10, 10, 0
     int8_t autoscale idleRumbleFuel;Max fuel adjustment;"%", 1, 0, -20, 20, 0
     uint16_t idleRumbleMaxRpm;Max RPM for rumble active;"rpm", 1, 0, 0, 2000, 0

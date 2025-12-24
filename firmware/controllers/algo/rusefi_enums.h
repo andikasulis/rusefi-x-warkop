@@ -402,6 +402,13 @@ typedef enum __attribute__ ((__packed__)) {
 } imu_type_e;
 
 typedef enum __attribute__ ((__packed__)) {
+	IRM_TIMING = 0,
+	IRM_FUEL = 1,
+	IRM_SPARK = 2,
+	IRM_COMBINED = 3,
+} idle_rumble_method_e;
+
+typedef enum __attribute__ ((__packed__)) {
 	ES_BPSX_D1 = 0,
 	/**
 	 * same as innovate LC2
