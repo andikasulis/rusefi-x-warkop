@@ -1915,7 +1915,7 @@ end_struct
 
 ! Idle Rumble Feature - Warkop-X ECU (cable throttle version)
 ! Creates "drumbal" effect via timing/fuel variation for aggressive idle sound
-    bit idleRumbleEnabled;Enable idle rumble effect
+    custom bool idleRumbleEnabled;Enable idle rumble effect
     uint8_t idleRumbleAmplitude;Rumble amplitude;"%", 1, 0, 0, 100, 0
     uint8_t idleRumblePeriod;Rumble period (speed);"x100ms", 1, 0, 1, 20, 0
     uint8_t idleRumbleMethod;Rumble method: 0=Timing 1=Fuel 2=Spark 3=Combined;"", 1, 0, 0, 3, 0
