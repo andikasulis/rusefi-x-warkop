@@ -1908,9 +1908,21 @@ struct vvl_s
     uint16_t deactivationRpmWindow;;"rpm", 1, 0, 0, 20000, 0
 end_struct
 
+
     vvl_s vvlController;
 
 ! historically 'unusedOftenChangesDuringFirmwareUpdate' was here - now that's just an anchor reminding where to insert new fields
+
+! Idle Rumble Feature - Warkop-X ECU (cable throttle version)
+! Creates "drumbal" effect via timing/fuel variation for aggressive idle sound
+    bit idleRumbleEnabled;Enable idle rumble effect
+    uint8_t idleRumbleAmplitude;Rumble amplitude, 0, 100, 0;"%"
+    uint8_t idleRumblePeriod;Rumble period (speed), 1, 20, 0;"x100ms"
+    uint8_t idleRumbleMethod;Rumble method: 0=Timing 1=Fuel 2=Spark 3=Combined, 0, 3, 0
+    int8_t autoscale idleRumbleTiming;Max timing offset, -10, 10, 0;"deg"
+    int8_t autoscale idleRumbleFuel;Max fuel adjustment, -20, 20, 0;"%"
+    uint16_t idleRumbleMaxRpm;Max RPM for rumble active, 0, 2000, 0;"rpm"
+    uint8_t idleRumbleMaxTps;Max TPS for rumble active, 0, 20, 0;"%"
 
 ! end of engine_configuration_s
 end_struct
