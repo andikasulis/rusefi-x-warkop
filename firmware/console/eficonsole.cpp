@@ -42,6 +42,11 @@ static void printUid() {
   engineConfiguration->device_uid[1] = uid[1];
   engineConfiguration->device_uid[2] = uid[2];
 }
+
+static void printCleanUid() {
+  uint32_t *uid = ((uint32_t *)UID_BASE);
+  efiPrintf("UID: %08X%08X%08X", uid[0], uid[1], uid[2]);
+}
 #endif
 
 /*
@@ -89,9 +94,9 @@ static void sayHello() {
 
 #if defined(STM32F4) && !defined(AT32F4XX)
   //	efiPrintf("ramReadProbe 0x20000010 %d", ramReadProbe((const char
-  //*)0x20000010)); 	efiPrintf("ramReadProbe 0x20020010 %d", ramReadProbe((const
-  //char *)0x20020010)); 	efiPrintf("ramReadProbe 0x20070010 %d",
-  //ramReadProbe((const char *)0x20070010));
+  //*)0x20000010)); 	efiPrintf("ramReadProbe 0x20020010 %d",
+  // ramReadProbe((const char *)0x20020010)); 	efiPrintf("ramReadProbe
+  // 0x20070010 %d", ramReadProbe((const char *)0x20070010));
 
   efiPrintf("isStm32F42x %s", boolToString(isStm32F42x()));
 #endif // STM32F4
@@ -268,6 +273,7 @@ void initializeConsole() {
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32H7)
   addConsoleAction("uid", printUid);
+  addConsoleAction("g", printCleanUid);
 #endif
 
   sayHello();
