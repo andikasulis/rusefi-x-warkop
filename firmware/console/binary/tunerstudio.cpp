@@ -584,6 +584,15 @@ bool TunerStudio::handlePlainCommand(TsChannelBase* tsChannel, uint8_t command) 
 		efiPrintf("Got naked Query command");
 		handleQueryCommand(tsChannel, TS_PLAIN);
 		return true;
+	} else if (command == TS_GET_ECU_ID) {
+		efiPrintf("Got naked ECU ID command");
+#if defined(STM32F4) || defined(STM32F4XX) || defined(STM32F7) || defined(STM32F7XX) || defined(STM32H7) || defined(STM32H7XX)
+		uint32_t *uid = ((uint32_t *)UID_BASE);
+		char uidBuffer[32];
+		chsnprintf(uidBuffer, sizeof(uidBuffer), "%08lX%08lX%08lX\r\n", (unsigned long)uid[0], (unsigned long)uid[1], (unsigned long)uid[2]);
+		tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)uidBuffer, strlen(uidBuffer));
+		return true;
+#endif
 	} else if (command == TS_TEST_COMMAND || command == 'T') {
 		handleTestCommand(tsChannel);
 		return true;
@@ -1025,6 +1034,15 @@ int TunerStudio::handleCrcCommand(TsChannelBase* tsChannel, char *data, int inco
 		tsChannel->sendResponse(TS_CRC, &bldata, 1, false);
 		break;
 	}
+#if defined(STM32F4) || defined(STM32F4XX) || defined(STM32F7) || defined(STM32F7XX) || defined(STM32H7) || defined(STM32H7XX)
+	case TS_GET_ECU_ID: {
+		uint32_t *uid = ((uint32_t *)UID_BASE);
+		char uidBuffer[25];
+		chsnprintf(uidBuffer, sizeof(uidBuffer), "%08lX%08lX%08lX", (unsigned long)uid[0], (unsigned long)uid[1], (unsigned long)uid[2]);
+		tsChannel->sendResponse(TS_CRC, (const uint8_t *)uidBuffer, 24);
+		break;
+	}
+#endif
 	default:
 		sendErrorCode(tsChannel, TS_RESPONSE_UNRECOGNIZED_COMMAND, "unknown_command");
 static char tsErrorBuff[80];

@@ -14,6 +14,8 @@
 #define TS_PAGE_SCATTER_OFFSETS		0x0100
 #define TS_PAGE_LTFT_TRIMS			0x0200
 
+#define TS_GET_ECU_ID				0x44
+
 typedef struct {
 	int queryCommandCounter;
 	int outputChannelsCommandCounter;
