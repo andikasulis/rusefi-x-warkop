@@ -570,6 +570,15 @@ void TunerStudio::handleQueryCommand(TsChannelBase* tsChannel, ts_response_forma
 	tsChannel->sendResponse(mode, (const uint8_t *)signature, strlen(signature) + 1);
 }
 
+static uint64_t djb2_64(const char* str) {
+	uint64_t hash = 5381;
+	int c;
+	while ((c = *str++)) {
+		hash = ((hash << 5) + hash) + c;
+	}
+	return hash;
+}
+
 /**
  * handle non CRC wrapped command
  *
@@ -588,9 +597,15 @@ bool TunerStudio::handlePlainCommand(TsChannelBase* tsChannel, uint8_t command) 
 		efiPrintf("Got naked ECU ID command");
 #if defined(STM32F4) || defined(STM32F4XX) || defined(STM32F40_41xxx) || defined(STM32F7) || defined(STM32F7XX) || defined(STM32H7) || defined(STM32H7XX)
 		uint32_t *uid = ((uint32_t *)UID_BASE);
-		char uidBuffer[32];
-		chsnprintf(uidBuffer, sizeof(uidBuffer), "%08lX%08lX%08lX\r\n", (unsigned long)uid[0], (unsigned long)uid[1], (unsigned long)uid[2]);
-		tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)uidBuffer, strlen(uidBuffer));
+		char buffer[128];
+#define ECU_ID_SALT "WARKOP_X_2025_HIDDEN"
+		chsnprintf(buffer, sizeof(buffer), "%08lX%08lX%08lX%s", (unsigned long)uid[0], (unsigned long)uid[1], (unsigned long)uid[2], ECU_ID_SALT);
+
+		uint64_t hash = djb2_64(buffer);
+
+		char resp[32];
+		chsnprintf(resp, sizeof(resp), "%08lX%08lX\r\n", (uint32_t)(hash >> 32), (uint32_t)hash);
+		tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)resp, strlen(resp));
 #else
 		tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)"ERR_MCU_NOT_RECOGNIZED\r\n", 25);
 #endif
@@ -1036,15 +1051,6 @@ int TunerStudio::handleCrcCommand(TsChannelBase* tsChannel, char *data, int inco
 		tsChannel->sendResponse(TS_CRC, &bldata, 1, false);
 		break;
 	}
-#if defined(STM32F4) || defined(STM32F4XX) || defined(STM32F7) || defined(STM32F7XX) || defined(STM32H7) || defined(STM32H7XX)
-	case TS_GET_ECU_ID: {
-		uint32_t *uid = ((uint32_t *)UID_BASE);
-		char uidBuffer[25];
-		chsnprintf(uidBuffer, sizeof(uidBuffer), "%08lX%08lX%08lX", (unsigned long)uid[0], (unsigned long)uid[1], (unsigned long)uid[2]);
-		tsChannel->sendResponse(TS_CRC, (const uint8_t *)uidBuffer, 24);
-		break;
-	}
-#endif
 	default:
 		sendErrorCode(tsChannel, TS_RESPONSE_UNRECOGNIZED_COMMAND, "unknown_command");
 static char tsErrorBuff[80];
