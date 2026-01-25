@@ -588,6 +588,9 @@ bool TunerStudio::handlePlainCommand(TsChannelBase* tsChannel, uint8_t command) 
 	// Bail fast if guaranteed not to be a plain command
 	if (command == 0) {
 		return false;
+	} else if (command == 'A') {
+		tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)"OKE_SECURED_V2\r\n", 16);
+		return true;
 	} else if (command == TS_HELLO_COMMAND || command == TS_QUERY_COMMAND) {
 		// We interpret 'Q' as TS_HELLO_COMMAND, since TS uses hardcoded 'Q' during ECU detection (scan all serial ports)
 		efiPrintf("Got naked Query command");
