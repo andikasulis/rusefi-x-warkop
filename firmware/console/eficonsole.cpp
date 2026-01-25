@@ -32,6 +32,9 @@
 std::optional<setup_custom_board_overrides_type> custom_board_boardSayHello;
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32H7)
+static void printUid() {
+  uint32_t *uid = ((uint32_t *)UID_BASE);
+  efiPrintf("MCU UID: %08lX%08lX%08lX", (unsigned long)uid[0], (unsigned long)uid[1], (unsigned long)uid[2]);
 }
 #endif
 
