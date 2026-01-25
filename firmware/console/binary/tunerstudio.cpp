@@ -576,17 +576,9 @@ void TunerStudio::handleQueryCommand(TsChannelBase* tsChannel, ts_response_forma
  * @return true if legacy command was processed, false otherwise
  */
 bool TunerStudio::handlePlainCommand(TsChannelBase* tsChannel, uint8_t command) {
-	// DEBUG LOG: Send response directly to serial channel so user can see it in terminal
-	char dbg[64];
-	chsnprintf(dbg, sizeof(dbg), "LOG: Received 0x%02X (%c)\r\n", (int)command, (command >= 32 && command <= 126) ? (char)command : '?');
-	tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)dbg, strlen(dbg));
-
 	// Bail fast if guaranteed not to be a plain command
 	if (command == 0) {
 		return false;
-	} else if (command == 'A') {
-		tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)"OKE\r\n", 5);
-		return true;
 	} else if (command == TS_HELLO_COMMAND || command == TS_QUERY_COMMAND) {
 		// We interpret 'Q' as TS_HELLO_COMMAND, since TS uses hardcoded 'Q' during ECU detection (scan all serial ports)
 		efiPrintf("Got naked Query command");
