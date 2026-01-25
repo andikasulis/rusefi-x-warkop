@@ -586,13 +586,15 @@ bool TunerStudio::handlePlainCommand(TsChannelBase* tsChannel, uint8_t command) 
 		return true;
 	} else if (command == TS_GET_ECU_ID) {
 		efiPrintf("Got naked ECU ID command");
-#if defined(STM32F4) || defined(STM32F4XX) || defined(STM32F7) || defined(STM32F7XX) || defined(STM32H7) || defined(STM32H7XX)
+#if defined(STM32F4) || defined(STM32F4XX) || defined(STM32F40_41xxx) || defined(STM32F7) || defined(STM32F7XX) || defined(STM32H7) || defined(STM32H7XX)
 		uint32_t *uid = ((uint32_t *)UID_BASE);
 		char uidBuffer[32];
 		chsnprintf(uidBuffer, sizeof(uidBuffer), "%08lX%08lX%08lX\r\n", (unsigned long)uid[0], (unsigned long)uid[1], (unsigned long)uid[2]);
 		tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)uidBuffer, strlen(uidBuffer));
-		return true;
+#else
+		tsChannel->sendResponse(TS_PLAIN, (const uint8_t *)"ERR_MCU_NOT_RECOGNIZED\r\n", 25);
 #endif
+		return true;
 	} else if (command == TS_TEST_COMMAND || command == 'T') {
 		handleTestCommand(tsChannel);
 		return true;
