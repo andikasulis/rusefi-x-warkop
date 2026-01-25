@@ -32,20 +32,6 @@
 std::optional<setup_custom_board_overrides_type> custom_board_boardSayHello;
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32H7)
-static void printUid() {
-  uint32_t *uid = ((uint32_t *)UID_BASE);
-  engine->outputChannels.deviceUid = crc8((const uint8_t *)uid, 12);
-  efiPrintf("********************** UID=%lx:%lx:%lx crc=%d "
-            "******************************",
-            uid[0], uid[1], uid[2], engine->outputChannels.deviceUid);
-  engineConfiguration->device_uid[0] = uid[0];
-  engineConfiguration->device_uid[1] = uid[1];
-  engineConfiguration->device_uid[2] = uid[2];
-}
-
-static void printCleanUid() {
-  uint32_t *uid = ((uint32_t *)UID_BASE);
-  efiPrintf("UID: %08X%08X%08X", uid[0], uid[1], uid[2]);
 }
 #endif
 
@@ -273,7 +259,6 @@ void initializeConsole() {
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32H7)
   addConsoleAction("uid", printUid);
-  addConsoleAction("g", printCleanUid);
 #endif
 
   sayHello();
